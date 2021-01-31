@@ -1,7 +1,8 @@
-from tkinter import *
-from PIL import Image, ImageTk
+import tkinter as tk
+from tkinter import Label, Button, StringVar, BOTH, Frame, messagebox
 from tkinter.filedialog import askopenfile, asksaveasfile
-from tkinter import messagebox
+from PIL import Image, ImageTk
+
 
 class Window(Frame):
     def __init__(self, master=None):
@@ -21,13 +22,13 @@ class Window(Frame):
         instructions = Label(master, text="Select a Image on your computer to resize it", font="Raleway")
         instructions.place(x=55, y=80)
 
-        #browse button
+        #Browse button
         browse_text = StringVar()
         browse_btn = Button(master, textvariable=browse_text, command=lambda:open_file(self), font="Raleway", bg="#e20074", fg="white", height=2, width=15)
         browse_text.set("Browse")
         browse_btn.place(x=59, y=120)
 
-        #save button
+        #Save button
         save_text = StringVar()
         save_btn = Button(master, textvariable=save_text, command=lambda:save_file(self), font="Raleway", bg="#e20074", fg="white", height=2, width=15)
         save_text.set("Save")
@@ -52,14 +53,28 @@ class Window(Frame):
             if self.image:
                 save_text.set("loading...")
                 files = [('GIF', '*.gif'), ('PNG', '*.png'), ('JPG', '*.jpg'),('All Files', '*.*')] 
-                file = asksaveasfile( initialfile=self.image_name, title="Save Resized Image", filetypes = files, defaultextension = files) 
-                
-                print("file.name: ", file.name)
+                file = asksaveasfile( title="Save Resized Image", filetypes = files, defaultextension = files) 
                 if file:
-                    #self.image.save("test.gif", format="gif")
                     self.image.save(file.name)
-                    save_text.set("Image saved")
-root = Tk()
+                    save_text.set("Save")
+                    messagebox.showinfo("Information","Image saved!")
+                    reset(self)
+
+        def reset(self, master=None):
+            self.image = None
+            labelcount = 0
+
+            for widget in self.master.winfo_children():
+                if widget.widgetName == "label":  
+                    labelcount += 1
+                    if labelcount == 2:   
+                        widget.destroy()
+
+
+
+
+
+root = tk.Tk()
 app = Window(root)
 root.wm_title("Resize Image")
 root.geometry("400x530")
