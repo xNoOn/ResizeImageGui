@@ -71,11 +71,10 @@ class Window(Frame):
                         widget.destroy()
 
 
-
-
-
 root = tk.Tk()
 app = Window(root)
 root.wm_title("Resize Image")
+root.iconbitmap("favicon.ico")
+root.iconphoto(False, tk.PhotoImage(file="icon.png"))
 root.geometry("400x530")
 root.mainloop()
