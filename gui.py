@@ -35,41 +35,54 @@ class Window(Frame):
         save_btn.place(x=214, y=120)
 
         def open_file(self):
-            browse_text.set("loading...")
-            file = askopenfile(parent=master, mode='rb', title="Choose a image file", filetype=[('Image Files', ['.jpeg', '.jpg', '.png', '.gif','*.*'])])
-            if file:
-                image = Image.open(file)
-                newsize = (300,300)
-                self.image = image.resize(newsize)
+            try:
+                browse_text.set("loading...")
+                file = askopenfile(parent=master, mode='rb', title="Choose a image file", filetype=[('Image Files', ['.jpeg', '.jpg', '.png', '.gif','*.*'])])
+                if file:
+                    image = Image.open(file)
+                    newsize = (300,300)
+                    self.image = image.resize(newsize)
+                    browse_text.set("Browse")
+                    
+                    #Display Image on screen
+                    render = ImageTk.PhotoImage(self.image)
+                    img = Label(image=render)
+                    img.image = render
+                    img.place(x=55, y=200)
+            except Exception as ex:
+                messagebox.showerror("Error","Something went wrong, try again please!")
                 browse_text.set("Browse")
-                
-                #Display Image on screen
-                render = ImageTk.PhotoImage(self.image)
-                img = Label(image=render)
-                img.image = render
-                img.place(x=55, y=200)
+                print(ex)
+
 
         def save_file(self):
-            if self.image:
-                save_text.set("loading...")
-                files = [('GIF', '*.gif'), ('PNG', '*.png'),('All Files', '*.*')] 
-                file = asksaveasfile( title="Save Resized Image", filetypes = files, defaultextension = files) 
-                if file:
-                    self.image.save(file.name)
-                    save_text.set("Save")
-                    messagebox.showinfo("Information","Image saved!")
-                    reset(self)
+            try:
+                if self.image:
+                    save_text.set("loading...")
+                    files = [('GIF', '*.gif'), ('PNG', '*.png'),('All Files', '*.*')] 
+                    file = asksaveasfile( title="Save Resized Image", filetypes = files, defaultextension = files) 
+                    if file:
+                        self.image.save(file.name)
+                        save_text.set("Save")
+                        messagebox.showinfo("Information","Image saved!")
+                        reset(self)
+            except Exception as ex:
+                messagebox.showerror("Error","Something went wrong, try again please!")
+                save_text.set("Save")
+                print(ex)
 
         def reset(self, master=None):
-            self.image = None
-            labelcount = 0
+            try:
+                self.image = None
+                labelcount = 0
 
-            for widget in self.master.winfo_children():
-                if widget.widgetName == "label":  
-                    labelcount += 1
-                    if labelcount == 2:   
-                        widget.destroy()
-
+                for widget in self.master.winfo_children():
+                    if widget.widgetName == "label":  
+                        labelcount += 1
+                        if labelcount == 2:   
+                            widget.destroy()
+            except Exception as ex:
+                print(ex)
 
 root = tk.Tk()
 app = Window(root)
