@@ -12,7 +12,7 @@ class Window(Frame):
         self.image = None
         
         #Logo
-        load = Image.open("logo.png")
+        load = Image.open("C:/Users/nicos/OneDrive/Projekte/Dev/ImageResize/logo.png")
         render = ImageTk.PhotoImage(load)
         img = Label(self, image=render)
         img.image = render
@@ -52,7 +52,7 @@ class Window(Frame):
         def save_file(self):
             if self.image:
                 save_text.set("loading...")
-                files = [('GIF', '*.gif'), ('PNG', '*.png'), ('JPG', '*.jpg'),('All Files', '*.*')] 
+                files = [('GIF', '*.gif'), ('PNG', '*.png'),('All Files', '*.*')] 
                 file = asksaveasfile( title="Save Resized Image", filetypes = files, defaultextension = files) 
                 if file:
                     self.image.save(file.name)
@@ -74,7 +74,6 @@ class Window(Frame):
 root = tk.Tk()
 app = Window(root)
 root.wm_title("Resize Image")
-root.iconbitmap("favicon.ico")
-root.iconphoto(False, tk.PhotoImage(file="icon.png"))
+root.iconbitmap("C:/Users/nicos/OneDrive/Projekte/Dev/ImageResize/favicon.ico")
 root.geometry("400x530")
 root.mainloop()
