@@ -1,9 +1,20 @@
+import os
+import sys as sys
 import tkinter as tk
 from tkinter import Label, Button, StringVar, BOTH, Frame, messagebox, Entry
 from tkinter.filedialog import askopenfile, asksaveasfile
 import tkinter.font as tkFont
 from PIL import Image, ImageTk
 
+def resource_path(relative_path):
+                #Get absolute path to resource, works for dev and for PyInstaller
+            try:
+                # PyInstaller creates a temp folder and stores path in _MEIPASS
+                base_path = sys._MEIPASS
+            except Exception:
+                base_path = os.path.abspath(".")
+
+            return os.path.join(base_path, relative_path)
 
 class Window(Frame):
     def __init__(self, master=None):
@@ -16,7 +27,9 @@ class Window(Frame):
         self.imageSize = None
         
         #Logo
-        load = Image.open("C:/Users/nicos/OneDrive/Projekte/Dev/ImageResize/logo.png")
+        Logo = resource_path("logo.png")
+
+        load = Image.open(Logo)
         render = ImageTk.PhotoImage(load)
         img = Label(self, image=render)
         img.image = render
@@ -55,7 +68,8 @@ class Window(Frame):
         def open_file(self):
             try:
                 browse_text.set("loading...")
-                file = askopenfile(parent=master, mode='rb', title="Choose a image file", filetype=[('Image Files', ['.jpeg', '.jpg', '.png', '.gif','*.*'])])
+                filetype=[('Image Files', ['.jpeg', '.jpg', '.png', '.gif']), ('All Files', '*.*')]
+                file = askopenfile(parent=master, mode='rb', title="Choose a image file", filetype=filetype)
                 if file:
                     image = Image.open(file)
                     #Get input length + input width
@@ -117,6 +131,9 @@ class Window(Frame):
 root = tk.Tk()
 app = Window(root)
 root.wm_title("Resize Image")
-root.iconbitmap("C:/Users/nicos/OneDrive/Projekte/Dev/ImageResize/favicon.ico")
+
+#Icon
+Favicon = resource_path("favicon.ico")
+root.iconbitmap(Favicon)
 root.geometry("400x540")
 root.mainloop()
