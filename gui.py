@@ -1,5 +1,6 @@
 import os
 import sys as sys
+import ctypes
 import tkinter as tk
 from tkinter import Label, Button, StringVar, BOTH, Frame, messagebox, Entry
 from tkinter.filedialog import askopenfile, asksaveasfile
@@ -7,13 +8,12 @@ import tkinter.font as tkFont
 from PIL import Image, ImageTk
 
 def resource_path(relative_path):
-                #Get absolute path to resource, works for dev and for PyInstaller
+            #Get absolute path to resource, works for dev and for PyInstaller
             try:
                 # PyInstaller creates a temp folder and stores path in _MEIPASS
                 base_path = sys._MEIPASS
             except Exception:
                 base_path = os.path.abspath(".")
-
             return os.path.join(base_path, relative_path)
 
 class Window(Frame):
@@ -28,7 +28,6 @@ class Window(Frame):
         
         #Logo
         Logo = resource_path("logo.png")
-
         load = Image.open(Logo)
         render = ImageTk.PhotoImage(load)
         img = Label(self, image=render)
@@ -127,6 +126,13 @@ class Window(Frame):
                 browse_text.set("Browse")
                 messagebox.showerror("Error","Please enter a numeric number!")
                 print(ex)
+
+#Set DPI 
+try: # >= win 8.1
+    ctypes.windll.shcore.SetProcessDpiAwareness(2)
+except: # win 8.0 or less
+    ctypes.windll.user32.SetProcessDPIAware()
+
 
 root = tk.Tk()
 app = Window(root)
